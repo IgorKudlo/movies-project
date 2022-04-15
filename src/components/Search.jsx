@@ -3,10 +3,18 @@ import React from "react"
 class Search extends React.Component {
     state = {
         search: '',
+        type: 'all',
     }
 
     handleKey = (event) => {
-        if (event.key === "Enter") this.props.searchMovies(this.state.search)
+        if (event.key === "Enter") this.props.searchMovies(this.state.search, this.state.type)
+    }
+
+    handleFilter = (event) => {
+        this.setState(
+            () => ({type: event.target.dataset.type}),
+            () => this.props.searchMovies(this.state.search, this.state.type)
+        )
     }
 
 
@@ -22,8 +30,40 @@ class Search extends React.Component {
                     onKeyDown={this.handleKey}
                 />
                 <button className="btn search-btn light-blue darken-4"
-                        onClick={() => this.props.searchMovies(this.state.search)}
+                        onClick={() => this.props.searchMovies(this.state.search, this.state.type)}
                 >Search</button>
+                <div>
+                    <label>
+                        <input className="with-gap"
+                               name="type"
+                               type="radio"
+                               onChange={this.handleFilter}
+                               checked={this.state.type === "all"}
+                               data-type="all"
+                        />
+                        <span>All</span>
+                    </label>
+                    <label>
+                        <input className="with-gap"
+                               name="type"
+                               type="radio"
+                               onChange={this.handleFilter}
+                               checked={this.state.type === "movie"}
+                               data-type="movie"
+                        />
+                        <span>Movies only</span>
+                    </label>
+                    <label>
+                        <input className="with-gap"
+                               name="type"
+                               type="radio"
+                               onChange={this.handleFilter}
+                               checked={this.state.type === "series"}
+                               data-type="series"
+                        />
+                        <span>Series only</span>
+                    </label>
+                </div>
             </div>
         )
     }
